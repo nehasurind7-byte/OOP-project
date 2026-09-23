@@ -1,0 +1,2 @@
+The cat is in the catalog.
+The category contains a cat.
