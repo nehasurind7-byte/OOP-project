@@ -1,0 +1,15 @@
+Hello World.This is my first firstsecond file program, second
+if(count == 0)
+            {
+                throw new ArithmeticException("No doctors found for 3PM-6PM");
+            }
+
+            if(count1 == 0)
+            {
+                throw new ArithmeticException("No doctors found for 12PM-3PM");
+            }
+
+            if(count2 == 0)
+            {
+                throw new ArithmeticException("No doctors found for 3PM-6PM");
+            }

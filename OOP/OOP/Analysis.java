@@ -5,11 +5,74 @@ import java.util.ArrayList;
 
 public class Analysis 
 {
+    Department dept;
+    private ArrayList<Workload> workloads;
+    private ArrayList<Bedpercentage> bedPercentages;
+    private ArrayList<Demandpercentages> demandPercentages;
+    void analyseDepartment(Department dept)
+    {
+        this.dept=dept;
+        String deptname=dept.getName();
+        ArrayList<Doctor> doctors=dept.getDoctors();
+        ArrayList<Bedrecords> bedrecords=dept.getBedrecords();
+        ArrayList<Demand> demands=dept.getDemand();
+        try
+        {
+            workloads = demandAnalysis(doctors, deptname);
+        }
+        catch (ArithmeticException e)
+        {
+            System.out.println("ERROR: " + e.getMessage());
+            workloads = new ArrayList<>();
+        }
+        try
+        {
+            bedPercentages = demandAnalysis(deptname, bedrecords);
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("ERROR: " + e.getMessage());
+            bedPercentages = new ArrayList<>();
+        }
+        try
+        {
+            demandPercentages = demandAnalysis(demands);
+        }
+        catch (ArithmeticException e)
+        {
+            System.out.println("ERROR: " + e.getMessage());
+            demandPercentages = new ArrayList<>();
+        }
+      
+    }
+     ArrayList<Workload> getWorkloads()
+    {
+        return workloads;
+    }
+
+    ArrayList<Bedpercentage> getBedPercentages()
+    {
+        return bedPercentages;
+    }
+
+    ArrayList<Demandpercentages> getDemandPercentages()
+    {
+        return demandPercentages;
+    }
+
     ArrayList<Workload> demandAnalysis(ArrayList<Doctor> doctors,String departmentName)
     {
-        System.out.print(departmentName);
+        System.out.print("===**"+departmentName+"**===");
+        System.out.println();
         ArrayList<Workload> workloads=new ArrayList<>();
+        System.out.println();
+
+        if (doctors == null || doctors.isEmpty())
+        {
+            throw new ArithmeticException("No doctors found for " + departmentName);
+        }
         ArrayList<LocalDate> proceesedDates=new ArrayList<>();
+
         for(int i=0;i<doctors.size();i++)
         {
             int count = 0;
@@ -48,18 +111,9 @@ public class Analysis
                     }   
                 }
             }
-            if(count==0)
-            {
-                throw new ArithmeticException("No doctors found for 9AM-12PM");
-            }
-            if(count1==0)
-            {
-                throw new ArithmeticException("No doctors found for 12PM-3PM");
-            }
-            if(count2==0)
-            {
-                throw new ArithmeticException("No doctors found for 3PM-6PM");
-            }
+
+            
+
             double ratio=(double)total/count;
             double ratio1=(double)total1/count1;
             double ratio2=(double)total2/count2;
@@ -74,7 +128,7 @@ public class Analysis
 
     ArrayList<Bedpercentage> demandAnalysis(String departmentName,ArrayList<Bedrecords> bedrecords)
     {
-        System.out.print(departmentName);
+    
         ArrayList<Bedpercentage> occupancyPercentages = new ArrayList<>();
         ArrayList<String> proceesedMonths=new ArrayList<>();
         for (int i = 0; i < bedrecords.size(); i++)
@@ -92,7 +146,7 @@ public class Analysis
             }
             proceesedMonths.add(month);
             double occupiedPerc=((double)occupied/total)*100;
-            Bedpercentage bp=new Bedpercentage(occupiedPerc);
+            Bedpercentage bp=new Bedpercentage(occupiedPerc,month);
             occupancyPercentages.add(bp);
         
         }
@@ -118,11 +172,15 @@ public class Analysis
             double unmetPercentage =((double) unmet / total) * 100;
             double performedPercentage = ((double) performed / total) * 100;
             int equipmentCount=demand1.getequipmentCount();
-            Demandpercentages D1 = new Demandpercentages(surgeryName,unmet,performed,equipmentCount,total);
+            Demandpercentages D1 =new Demandpercentages(surgeryName,unmetPercentage,performedPercentage,equipmentCount,total);
             demandpercentages.add(D1);
     }
     return demandpercentages;
     }
+    
+    
+    
+    
 }
     
 

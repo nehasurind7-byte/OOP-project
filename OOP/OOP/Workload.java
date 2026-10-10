@@ -32,4 +32,8 @@ public class Workload {
     {
         return dailyavg;
     }
+    LocalDate getLocalDate()
+    {
+        return  date;
+    }
 }

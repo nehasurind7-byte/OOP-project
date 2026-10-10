@@ -1,2 +1,2 @@
-The dog is in the dogalog.
-The dogegory contains a dog.
+The dog is in the catalog.
+The category contains a cat.
