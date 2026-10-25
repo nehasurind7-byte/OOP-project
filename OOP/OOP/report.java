@@ -1,11 +1,17 @@
 package OOP.OOP;
 import java.util.ArrayList;
-import java.util.Scanner;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import java.awt.Font;
+
 
 public abstract class report
 {
-    abstract void generateReport();
-    abstract void showInference();
+    abstract String generateReport();
+    abstract String showInference();
   
 }
 class WorkloadReport extends report
@@ -16,52 +22,50 @@ class WorkloadReport extends report
     {
         this.workloads = workloads;
     }
-    void generateReport()
+    String generateReport() 
     {
-        System.out.println("==DOCTOR TO PATIENT RATIO==");
-        System.out.println();
+        StringBuilder output = new StringBuilder();
 
-        for(Workload w : workloads)
+        output.append("== DOCTOR TO PATIENT RATIO ==\n\n");
+
+        for (Workload w : workloads) 
         {
-            System.out.println(w.getLocalDate());
-            System.out.println("9AM-12PM:"+w.getRatio());
-            System.out.println("12PM-3PM:"+w.getRatio1());
-            System.out.println("3PM-6PM:"+w.getRatio2());
-            System.out.println("DAILY AVG:"+w.getDailyavg());
-            System.out.println();
+            output.append("Date: ").append(w.getLocalDate()).append("\n");
+            output.append("9 AM - 12 PM: ").append(w.getRatio()).append("\n");
+            output.append("12 PM - 3 PM: ").append(w.getRatio1()).append("\n");
+            output.append("3 PM - 6 PM: ").append(w.getRatio2()).append("\n");
+            output.append("Daily Average: ").append(w.getDailyavg()).append("\n\n");
         }
+        return output.toString();
     }
-     void showInference()
+
+    String showInference() 
     {
-        for(Workload w : workloads)
+        StringBuilder output = new StringBuilder();
+
+        for (Workload w : workloads) 
         {
-            if(w.getRatio() > 30)
-            {   
-                System.out.println(w.getLocalDate());
-                System.out.println("High workload detected: 9 AM - 12 PM");
-                System.out.println();
+
+            if (w.getRatio() > 30) 
+            {
+                output.append(w.getLocalDate()).append("\nHigh workload detected: 9 AM - 12 PM\n\n");
             }
 
-            if(w.getRatio1() > 30)
+            if (w.getRatio1() > 30) 
             {
-                System.out.println(w.getLocalDate());
-                System.out.println("High workload detected: 12 PM - 3 PM");
-                System.out.println();
+                output.append(w.getLocalDate()).append("\nHigh workload detected: 12 PM - 3 PM\n\n");
+               
             }
-
-            if(w.getRatio2() > 30)
+            if (w.getRatio2() > 30) 
             {
-                System.out.println(w.getLocalDate());
-                System.out.println("High workload detected: 3 PM - 6 PM");
-                System.out.println();
-            }
-            else
-            {
-                System.out.println("NO HIGH WORKLOAD DETECTED....   ");
+                output.append(w.getLocalDate()).append("\nHigh workload detected: 3 PM - 6 PM\n\n");
             }
         }
+
+        return output.toString();
     }
 }
+
 class Bedreport extends report
 {
     private ArrayList<Bedpercentage> occuBedpercentages;
@@ -69,85 +73,123 @@ class Bedreport extends report
     {
         this.occuBedpercentages=occuBedpercentages;
     }
-    void generateReport()
-    {
-        for(Bedpercentage B:occuBedpercentages)
+    
+     String generateReport() 
+     {
+        StringBuilder output = new StringBuilder();
+
+        output.append("== BED OCCUPANCY REPORT ==\n\n");
+        for (Bedpercentage b : occuBedpercentages)
         {
-            System.out.println(B.getPercentage());
-            System.out.println();
+            output.append("Month: ").append(b.getMonth()).append("\n");
+            output.append("Occupancy: ").append(b.getPercentage()).append("%\n\n");
         }
+        return output.toString();
     }
-    void showInference()
+    String showInference() 
     {
-        for(Bedpercentage B:occuBedpercentages)
+        StringBuilder output = new StringBuilder();
+        for (Bedpercentage b : occuBedpercentages) 
         {
-            System.out.println(B.getMonth());
-            if(B.getPercentage()>90)
+            double percentage = b.getPercentage();
+
+            output.append(b.getMonth()).append("\n");
+
+            if (percentage >= 90)
             {
-                System.out.println("Very high occupancy ");
-                System.out.println();
+                output.append("Very high occupancy\n\n");
             }
-            if(B.getPercentage()<90 && B.getPercentage()>70)
+            else if (percentage > 70) 
             {
-                System.out.println("High occupancy ");
-                System.out.println();
-            }
-            if(B.getPercentage()<70)
+                output.append("High occupancy\n\n");
+            } else 
             {
-                System.out.println("Normal occupancy ");
-                System.out.println();
+                output.append("Normal occupancy\n\n");
             }
         }
+
+        return output.toString();
     }
 }
 class DemandReport extends report
 {   
-    Scanner sc=new Scanner(System.in);
     private ArrayList<Demandpercentages> demandpercentages;
     DemandReport(ArrayList<Demandpercentages> demandpercentages)
     {
         this.demandpercentages=demandpercentages;
     }
-    void generateReport()
+    String generateReport()
     {
-        double unmetP=0.0;
-        double performP=0;
-        int totalDemand=0;
-        for(Demandpercentages d:demandpercentages)
+        StringBuilder output = new StringBuilder();
+
+        output.append("== SURGERY DEMAND REPORT ==\n\n");
+
+        for (Demandpercentages d : demandpercentages)
         {
-            unmetP=d.getunmetPercentage();
-            performP=d.getperformedPercentage();
-            System.out.println("Surgery:"+d.getsurgeryName());
-            System.out.println("Percentage of unperformed surgeries:"+unmetP);
-            System.out.println("Percentage of performed surgeries:"+performP);
-            System.out.println("Total high end equipments owned:"+d.getequipmentCount());
-            System.out.println();
+            output.append("Surgery: ").append(d.getsurgeryName()).append("\n");
+            output.append("Percentage of unperformed surgeries: ").append(d.getunmetPercentage()).append("%\n");
+            output.append("Percentage of performed surgeries: ").append(d.getperformedPercentage()).append("%\n");
+            output.append("Total high-end equipment owned: ").append(d.getequipmentCount()).append("\n\n");
         }
+
+        return output.toString();
     }
-    void showInference()
+    String showInference() 
     {
-        
-        for(Demandpercentages d:demandpercentages)
+        StringBuilder output = new StringBuilder();
+        for (Demandpercentages d : demandpercentages) 
         {
-            System.out.println("Enter the minimum expected number of cases per month for maintaining the specialised equipment");
-            
-            int limit=0;
-            limit=sc.nextInt();
-            if(d.gettotalDemand() > limit && d.getunmetPercentage() > 50)
+            String answer = JOptionPane.showInputDialog(
+                null,
+                "Enter the minimum expected number of cases per month " +
+                "for maintaining specialised equipment:\n" +
+                d.getsurgeryName()
+            );
+
+            if (answer == null) 
             {
-                System.out.println("High unmet demand detected for "+ d.getsurgeryName());
-                System.out.println("This may indicate a capacity constraint and could warrant further investigation.");
-                System.out.println();
+                output.append("Inference skipped for ")
+                      .append(d.getsurgeryName()).append(".\n\n");
+                continue;
             }
-            else
+
+            int limit;
+
+            try 
             {
-                System.out.println("No high demand detected for "+d.getsurgeryName());
+                limit = Integer.parseInt(answer.trim());
+
+                if (limit < 0) {
+                    output.append("Invalid threshold for ")
+                          .append(d.getsurgeryName())
+                          .append(".\n\n");
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                output.append("Invalid number entered for ")
+                      .append(d.getsurgeryName())
+                      .append(".\n\n");
+                continue;
+            }
+
+            if (d.gettotalDemand() > limit &&
+                d.getunmetPercentage() > 50) 
+            {
+
+                output.append("High unmet demand detected for ").append(d.getsurgeryName()).append("\n");
+                output.append("This may indicate a capacity constraint and " +"could warrant further investigation.\n\n");
+            }
+            else 
+            {
+                output.append("No high demand detected for ").append(d.getsurgeryName()).append(".\n\n");
             }
         }
 
+        return output.toString();
     }
+}
 
     
 
-}
+
 

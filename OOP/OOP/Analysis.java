@@ -131,25 +131,26 @@ public class Analysis
     
         ArrayList<Bedpercentage> occupancyPercentages = new ArrayList<>();
         ArrayList<String> proceesedMonths=new ArrayList<>();
-        for (int i = 0; i < bedrecords.size(); i++)
-        {
-            int total = bedrecords.get(i).getbedTotal();
-            int occupied = bedrecords.get(i).getbedOccupied();
-            String month=bedrecords.get(i).getMonth();
-            if(total<=0)
-            {
-                throw new IllegalArgumentException("Total beds must be greater than zero");
-            }
-            if(proceesedMonths.contains(month))
-            {
-                continue;
-            }
-            proceesedMonths.add(month);
-            double occupiedPerc=((double)occupied/total)*100;
-            Bedpercentage bp=new Bedpercentage(occupiedPerc,month);
-            occupancyPercentages.add(bp);
         
-        }
+            for (int i = 0; i < bedrecords.size(); i++)
+            {
+                int total = bedrecords.get(i).getbedTotal();
+                int occupied = bedrecords.get(i).getbedOccupied();
+                String month=bedrecords.get(i).getMonth();
+                if(total<=0)
+                {
+                    throw new IllegalArgumentException("Total beds must be greater than zero");
+                }
+                if(proceesedMonths.contains(month))
+                {
+                    continue;
+                }
+                proceesedMonths.add(month);
+                double occupiedPerc=((double)occupied/total)*100;
+                Bedpercentage bp=new Bedpercentage(occupiedPerc,month);
+                occupancyPercentages.add(bp);
+            }
+        
 
         return occupancyPercentages;
     }
